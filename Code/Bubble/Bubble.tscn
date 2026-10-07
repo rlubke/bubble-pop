@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://lxljfgfynsd"]
+
+[ext_resource type="Script" uid="uid://cvjbqcp5iaiml" path="res://Bubble/Bubble.gd" id="1_iauun"]
+[ext_resource type="Texture2D" uid="uid://brsy70u843wyn" path="res://Textures/bubble.png" id="1_sc4i0"]
+
+[node name="Bubble" type="Node2D" unique_id=391024282]
+position = Vector2(632, 332)
+script = ExtResource("1_iauun")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2017687433]
+texture = ExtResource("1_sc4i0")
