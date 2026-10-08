@@ -5,7 +5,12 @@ var bubbles
 
 const BUBBLE: PackedScene = preload("res://Bubble/Bubble.tscn")
 
+@onready
+var audio_system = $AudioSystem
+
 func blow_bubble():
+	var bubble: Bubble = BUBBLE.instantiate();
+	bubble.audio_suystem = audio_system
 	add_child(BUBBLE.instantiate())
 
 func _ready() -> void:

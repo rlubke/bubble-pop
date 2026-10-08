@@ -9,6 +9,10 @@ const ABS_MIN_HT: int = 20
 
 @onready
 var sprite: Sprite2D = $Sprite2D
+
+@onready
+var audio_system: AudioStreamPlayer2D
+
 var max_horizontal_translation: int
 var translation_direction: int
 var original_x_pos: float;
@@ -21,6 +25,8 @@ func on_clicked(_viewport: Node, event: InputEvent, _shape_idx: int):
 
 		
 func pop():
+	audio_system.position = position
+	audio_system.play()
 	queue_free();
 
 	
@@ -34,8 +40,12 @@ func setup_horizontal_translation():
 
 		
 func setup_initial_position(bubble_scale: float):
-	original_x_pos = randf_range(100, 1100)
+	original_x_pos = randf_range(0, get_viewport().size.x)
 	position.x = original_x_pos
+	
+	# There's a probably a better way to do this
+	# put bubble's initial y position to be just below
+	# the viewport based on the scaled size of the image.
 	position.y = get_viewport().size.y + (sprite.get_rect().size.y * bubble_scale)
 	
 
