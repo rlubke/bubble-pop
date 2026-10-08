@@ -7,11 +7,14 @@ const SPEED: int = 100
 const ABS_MAX_HT: int = 50
 const ABS_MIN_HT: int = 20
 
+
+
 @onready
 var sprite: Sprite2D = $Sprite2D
 
-@onready
-var audio_system: AudioStreamPlayer2D
+var audio_system: AudioStreamPlayer2D;
+
+var stream
 
 var max_horizontal_translation: int
 var translation_direction: int
@@ -25,7 +28,9 @@ func on_clicked(_viewport: Node, event: InputEvent, _shape_idx: int):
 
 		
 func pop():
+	print(audio_system)
 	audio_system.position = position
+	audio_system.stream = stream
 	audio_system.play()
 	queue_free();
 
