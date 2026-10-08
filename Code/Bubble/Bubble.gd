@@ -6,14 +6,14 @@ const TRANS_RIGHT: int = 1
 const SPEED: int = 100
 const ABS_MAX_HT: int = 50
 const ABS_MIN_HT: int = 20
-var maxHorizontalTranslation: int
-var translationDirection: int
-var originalXPos;
 
 @onready
 var sprite: Sprite2D = $Sprite2D
+var max_horizontal_translation: int
+var translation_direction: int
+var original_x_pos: float;
 
-func on_clicked(viewport: Node, event: InputEvent, shape_idx: int):
+func on_clicked(_viewport: Node, event: InputEvent, _shape_idx: int):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
@@ -25,33 +25,34 @@ func pop():
 
 	
 func setup_horizontal_translation():
-	maxHorizontalTranslation = randi_range(ABS_MIN_HT, ABS_MAX_HT)
-	print(maxHorizontalTranslation)
+	max_horizontal_translation = randi_range(ABS_MIN_HT, ABS_MAX_HT)
+
 	if randi_range(1, 2) % 2 == 0:
-		translationDirection = TRANS_LEFT
+		translation_direction = TRANS_LEFT
 	else:
-		translationDirection = TRANS_RIGHT
+		translation_direction = TRANS_RIGHT
 
 		
 func setup_initial_position(bubble_scale: float):
-	originalXPos = randi_range(100, 1100)
-	position.x = originalXPos
+	original_x_pos = randf_range(100, 1100)
+	position.x = original_x_pos
 	position.y = get_viewport().size.y + (sprite.get_rect().size.y * bubble_scale)
 	
+
 func process_horizontal_translation():
 	var curX: float = position.x;
-	if translationDirection == TRANS_LEFT:
-		if curX - 1 >= originalXPos - maxHorizontalTranslation:
+	if translation_direction == TRANS_LEFT:
+		if curX - 1 >= original_x_pos - max_horizontal_translation:
 			position.x = curX - 1;
 		else:
-			translationDirection = TRANS_RIGHT
+			translation_direction = TRANS_RIGHT
 			position.x = curX + 1;
 
-	if translationDirection == TRANS_RIGHT:
-		if curX + 1 <= originalXPos + maxHorizontalTranslation:
+	if translation_direction == TRANS_RIGHT:
+		if curX + 1 <= original_x_pos + max_horizontal_translation:
 			position.x = curX + 1;
 		else:
-			translationDirection = TRANS_LEFT
+			translation_direction = TRANS_LEFT
 			position.x = curX - 1;
 
 
@@ -72,5 +73,11 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	position.y -= SPEED * delta # pixes / frame
-	process_horizontal_translation()
+	
+	# If the bubble has reached the top, 'pop' to free memory,
+	# otherwise continue with horizontal translation processing.
+	if (position.y < 0):
+		pop()
+	else:
+		process_horizontal_translation()
 	
