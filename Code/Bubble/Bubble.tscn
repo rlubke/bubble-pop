@@ -3,9 +3,15 @@
 [ext_resource type="Script" uid="uid://cvjbqcp5iaiml" path="res://Bubble/Bubble.gd" id="1_iauun"]
 [ext_resource type="Texture2D" uid="uid://brsy70u843wyn" path="res://Textures/bubble.png" id="1_sc4i0"]
 
-[node name="Bubble" type="Node2D" unique_id=391024282]
-position = Vector2(632, 332)
+[sub_resource type="CircleShape2D" id="CircleShape2D_0hteq"]
+radius = 241.53053
+
+[node name="Bubble" type="Area2D" unique_id=196481614]
 script = ExtResource("1_iauun")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2017687433]
 texture = ExtResource("1_sc4i0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1854580162]
+position = Vector2(0, -1)
+shape = SubResource("CircleShape2D_0hteq")
