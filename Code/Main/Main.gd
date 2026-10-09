@@ -1,17 +1,37 @@
 extends Node
 class_name Main
 
-var bubbles
+const BUBBLE = preload("res://Bubble/Bubble.tscn")
 
-const BUBBLE: PackedScene = preload("res://Bubble/Bubble.tscn")
+# list of all pop sounds.
+var pop_sounds: Array[Resource]
 
-var pop_sounds
+# score tracking
+var score := 0;
 
 @onready
 var audio_system: AudioStreamPlayer2D = $AudioSystem
 
+@onready
+var label: Label = $UI/Label
+
+# ESC key handling.
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		if event.keycode == KEY_ESCAPE and event.pressed:
+			get_tree().quit()
+
+
+# Increase and displays score.			
+func increase_score():
+	score += 1
+	label.text = str(score)
+
+# Preload all pop way files.
 func preload_audio_files():
 	pop_sounds = []
+	# there's probably a better way to do this, but it's good enough
+	# for now.
 	for i in range(0, 12):
 		var path: String = "res://Sfx/"
 
@@ -24,8 +44,9 @@ func preload_audio_files():
 		
 		pop_sounds.append(load(path))
 		print(pop_sounds)
-		
 
+
+# "blows" a bubble.
 func blow_bubble():
 	var bubble: Bubble = BUBBLE.instantiate();
 
@@ -33,6 +54,9 @@ func blow_bubble():
 	# pop wav to stream
 	bubble.audio_system = audio_system
 	bubble.stream = pop_sounds[randi_range(0, 11)]
+	
+	# forward reference of main
+	bubble.main = self;
 
 	add_child(bubble)
 

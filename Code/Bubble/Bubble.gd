@@ -1,40 +1,55 @@
 extends Area2D
 class_name Bubble
 
-const TRANS_LEFT: int = 0
-const TRANS_RIGHT: int = 1
-const SPEED: int = 100
-const ABS_MAX_HT: int = 50
-const ABS_MIN_HT: int = 20
+# translating left
+const TRANS_LEFT = 0
 
+# translating right
+const TRANS_RIGHT = 1
 
+# verticle speed
+const SPEED = 100
+
+# max # of pixes a bubble may move left/right of its original x position
+const ABS_MAX_HT = 50
+
+# min # of pixes a bubble may move left/right of its original x position
+const ABS_MIN_HT = 20
 
 @onready
 var sprite: Sprite2D = $Sprite2D
 
 var audio_system: AudioStreamPlayer2D;
 
-var stream
+var stream: AudioStream
+var main: Main
 
 var max_horizontal_translation: int
 var translation_direction: int
 var original_x_pos: float;
 
+# Left mouse button will pop bubbles.
 func on_clicked(_viewport: Node, event: InputEvent, _shape_idx: int):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
-				pop();
+				pop(true);
 
-		
-func pop():
-	print(audio_system)
+
+# Pops the bubble.  If scored is 'true', the score will be increased,
+# otherwise the score remains unchanged.
+func pop(scored: bool):
 	audio_system.position = position
 	audio_system.stream = stream
 	audio_system.play()
+	
+	if scored:
+		main.increase_score()
+	
 	queue_free();
 
-	
+
+# setup variables for horizontal translation
 func setup_horizontal_translation():
 	max_horizontal_translation = randi_range(ABS_MIN_HT, ABS_MAX_HT)
 
@@ -43,7 +58,8 @@ func setup_horizontal_translation():
 	else:
 		translation_direction = TRANS_RIGHT
 
-		
+
+# initialize initial position of the bubble.
 func setup_initial_position(bubble_scale: float):
 	original_x_pos = randf_range(0, get_viewport().size.x)
 	position.x = original_x_pos
@@ -54,6 +70,7 @@ func setup_initial_position(bubble_scale: float):
 	position.y = get_viewport().size.y + (sprite.get_rect().size.y * bubble_scale)
 	
 
+# moves the bubbles left/right as they move up the viewport.
 func process_horizontal_translation():
 	var curX: float = position.x;
 	if translation_direction == TRANS_LEFT:
@@ -92,7 +109,7 @@ func _process(delta: float) -> void:
 	# If the bubble has reached the top, 'pop' to free memory,
 	# otherwise continue with horizontal translation processing.
 	if (position.y < 0):
-		pop()
+		pop(false)
 	else:
 		process_horizontal_translation()
 	
