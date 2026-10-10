@@ -26,7 +26,8 @@ func _input(event: InputEvent) -> void:
 func increase_score():
 	score += 1
 	label.text = str(score)
-	
+
+
 # Decrease and displays score.
 func decrease_score():
 	score -= 1

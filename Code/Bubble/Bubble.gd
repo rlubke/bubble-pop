@@ -42,18 +42,19 @@ func pop(scored: bool):
 	audio_system.position = position
 	audio_system.stream = stream
 	audio_system.play()
-	
+
 	if scored:
 		main.increase_score()
 	else:
 		main.decrease_score()
-	
+
 	queue_free();
 
 
+# calculates max horizontal translation length.
 func update_max_horizontal_translation():
 	max_horizontal_translation = randi_range(ABS_MIN_HT, ABS_MAX_HT)
-	
+
 
 # setup variables for horizontal translation
 func setup_horizontal_translation():
@@ -69,7 +70,7 @@ func setup_horizontal_translation():
 func setup_initial_position(bubble_scale: float):
 	original_x_pos = randf_range(0, get_viewport().size.x)
 	position.x = original_x_pos
-	
+
 	# There's a probably a better way to do this
 	# put bubble's initial y position to be just below
 	# the viewport based on the scaled size of the image.
@@ -107,18 +108,17 @@ func _ready() -> void:
 
 	# set coordinates
 	setup_initial_position(s)
-	
+
 	setup_horizontal_translation()
-	
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	position.y -= SPEED * delta # pixes / frame
-	
+
 	# If the bubble has reached the top, 'pop' to free memory,
 	# otherwise continue with horizontal translation processing.
 	if (position.y < 0):
 		pop(false)
 	else:
 		process_horizontal_translation()
-	
