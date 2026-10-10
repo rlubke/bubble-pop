@@ -22,10 +22,16 @@ func _input(event: InputEvent) -> void:
 			get_tree().quit()
 
 
-# Increase and displays score.			
+# Increase and displays score.
 func increase_score():
 	score += 1
 	label.text = str(score)
+	
+# Decrease and displays score.
+func decrease_score():
+	score -= 1
+	label.text = str(score)
+
 
 # Preload all pop way files.
 func preload_audio_files():
@@ -43,7 +49,6 @@ func preload_audio_files():
 		path += ".wav"
 		
 		pop_sounds.append(load(path))
-		print(pop_sounds)
 
 
 # "blows" a bubble.
@@ -63,9 +68,15 @@ func blow_bubble():
 
 func _ready() -> void:
 	preload_audio_files()
-	print(pop_sounds)
-	for i in range(1000):
+	
+	# another find on the Godot forums - handles the z-index
+	# for the bubbles, so the mouse click is handled by the top
+	# bubble only.  
+	get_viewport().physics_object_picking_first_only = true
+	get_viewport().physics_object_picking_sort = true
+
+	while true:
 		blow_bubble()
 		
 		# create a random timer that will pause the loop at random intervals
-		await get_tree().create_timer(randf_range(.5, 2)).timeout
+		await get_tree().create_timer(randf_range(.2, .6)).timeout

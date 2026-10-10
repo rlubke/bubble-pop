@@ -45,13 +45,19 @@ func pop(scored: bool):
 	
 	if scored:
 		main.increase_score()
+	else:
+		main.decrease_score()
 	
 	queue_free();
 
 
+func update_max_horizontal_translation():
+	max_horizontal_translation = randi_range(ABS_MIN_HT, ABS_MAX_HT)
+	
+
 # setup variables for horizontal translation
 func setup_horizontal_translation():
-	max_horizontal_translation = randi_range(ABS_MIN_HT, ABS_MAX_HT)
+	update_max_horizontal_translation()
 
 	if randi_range(1, 2) % 2 == 0:
 		translation_direction = TRANS_LEFT
@@ -68,7 +74,6 @@ func setup_initial_position(bubble_scale: float):
 	# put bubble's initial y position to be just below
 	# the viewport based on the scaled size of the image.
 	position.y = get_viewport().size.y + (sprite.get_rect().size.y * bubble_scale)
-	
 
 # moves the bubbles left/right as they move up the viewport.
 func process_horizontal_translation():
@@ -78,6 +83,8 @@ func process_horizontal_translation():
 			position.x = curX - 1;
 		else:
 			translation_direction = TRANS_RIGHT
+			# on direction change, vary max translation
+			update_max_horizontal_translation()
 			position.x = curX + 1;
 
 	if translation_direction == TRANS_RIGHT:
@@ -85,6 +92,8 @@ func process_horizontal_translation():
 			position.x = curX + 1;
 		else:
 			translation_direction = TRANS_LEFT
+			# on direction change, vary max translation
+			update_max_horizontal_translation()
 			position.x = curX - 1;
 
 
@@ -93,7 +102,7 @@ func _ready() -> void:
 	input_event.connect(on_clicked)
 
 	# set scale
-	var s: float = randf_range(0.1, .7)
+	var s: float = randf_range(0.1, 1)
 	set_scale(Vector2(s, s))
 
 	# set coordinates
