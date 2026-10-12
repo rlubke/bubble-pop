@@ -78,6 +78,6 @@ func _ready() -> void:
 
 	while true:
 		blow_bubble()
-		
+
 		# create a random timer that will pause the loop at random intervals
 		await get_tree().create_timer(randf_range(.2, .6)).timeout

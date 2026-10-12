@@ -7,11 +7,8 @@ const TRANS_LEFT := 0
 # translating right
 const TRANS_RIGHT := 1
 
-# vertical speed
-const SPEED := 100
-
 # max # of pixes a bubble may move left/right of its original x position
-const ABS_MAX_HT := 50
+const ABS_MAX_HT := 100
 
 # min # of pixes a bubble may move left/right of its original x position
 const ABS_MIN_HT := 20
@@ -27,6 +24,8 @@ var main: Main
 var max_horizontal_translation: int
 var translation_direction: int
 var original_x_pos: float;
+var sprite_half_length: float;
+var speed: int;
 
 # Left mouse button will pop bubbles.
 func on_clicked(_viewport: Node, event: InputEvent, _shape_idx: int):
@@ -42,7 +41,7 @@ func pop(scored: bool):
 	audio_system.position = position
 	audio_system.stream = stream
 	audio_system.play()
-
+	
 	if scored:
 		main.increase_score()
 	else:
@@ -52,8 +51,8 @@ func pop(scored: bool):
 
 
 # calculates max horizontal translation length.
-func update_max_horizontal_translation():
-	max_horizontal_translation = randi_range(ABS_MIN_HT, ABS_MAX_HT)
+func update_max_horizontal_translation(factor: int = 1):
+	max_horizontal_translation = randi_range(ABS_MIN_HT * factor, ABS_MAX_HT * factor)
 
 
 # setup variables for horizontal translation
@@ -70,17 +69,25 @@ func setup_horizontal_translation():
 func setup_initial_position(bubble_scale: float):
 	original_x_pos = randf_range(0, get_viewport().size.x)
 	position.x = original_x_pos
-
-	# There's a probably a better way to do this
-	# put bubble's initial y position to be just below
-	# the viewport based on the scaled size of the image.
-	position.y = get_viewport().size.y + (sprite.get_rect().size.y * bubble_scale)
+	sprite_half_length = (sprite.get_rect().size.x / 2) * bubble_scale
+	
+	if position.x - sprite_half_length < 0:
+		position.x = sprite_half_length;
+	elif position.x + sprite_half_length > get_viewport().size.x:
+		position.x = get_viewport().size.x - sprite_half_length
+	
+	position.y = (get_viewport().size.y + ((sprite.get_rect().size.y * bubble_scale)) / 2)
 
 # moves the bubbles left/right as they move up the viewport.
 func process_horizontal_translation():
 	var curX: float = position.x;
 	if translation_direction == TRANS_LEFT:
-		if curX - 1 >= original_x_pos - max_horizontal_translation:
+		if curX - sprite_half_length - 1 <= 0:
+			translation_direction = TRANS_RIGHT
+			# on direction change, vary max translation
+			update_max_horizontal_translation(3)
+			position.x = curX + 1;
+		elif curX - 1 >= original_x_pos - max_horizontal_translation:
 			position.x = curX - 1;
 		else:
 			translation_direction = TRANS_RIGHT
@@ -89,6 +96,11 @@ func process_horizontal_translation():
 			position.x = curX + 1;
 
 	if translation_direction == TRANS_RIGHT:
+		if curX + sprite_half_length + 1 >= get_viewport().size.x:
+			translation_direction = TRANS_LEFT
+			# on direction change, vary max translation
+			update_max_horizontal_translation(3)
+			position.x = curX - 1;
 		if curX + 1 <= original_x_pos + max_horizontal_translation:
 			position.x = curX + 1;
 		else:
@@ -103,7 +115,7 @@ func _ready() -> void:
 	input_event.connect(on_clicked)
 
 	# set scale
-	var s: float = randf_range(0.1, 1)
+	var s: float = randf_range(0.1, .8)
 	set_scale(Vector2(s, s))
 
 	# set coordinates
@@ -114,7 +126,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	position.y -= SPEED * delta # pixes / frame
+	position.y -= randi_range(75, 200) * delta # pixes / frame
 
 	# If the bubble has reached the top, 'pop' to free memory,
 	# otherwise continue with horizontal translation processing.
