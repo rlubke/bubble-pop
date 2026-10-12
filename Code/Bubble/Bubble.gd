@@ -117,6 +117,9 @@ func _ready() -> void:
 	# set scale
 	var s: float = randf_range(0.1, .8)
 	set_scale(Vector2(s, s))
+	
+	# set random speed
+	speed = randi_range(75, 200)
 
 	# set coordinates
 	setup_initial_position(s)
@@ -126,7 +129,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	position.y -= randi_range(75, 200) * delta # pixes / frame
+	position.y -= speed * delta # pixes / frame
 
 	# If the bubble has reached the top, 'pop' to free memory,
 	# otherwise continue with horizontal translation processing.
