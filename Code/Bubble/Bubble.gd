@@ -95,7 +95,7 @@ func process_horizontal_translation():
 			update_max_horizontal_translation()
 			position.x = curX + 1;
 
-	if translation_direction == TRANS_RIGHT:
+	elif translation_direction == TRANS_RIGHT:
 		if curX + sprite_half_length + 1 >= get_viewport().size.x:
 			translation_direction = TRANS_LEFT
 			# on direction change, vary max translation
