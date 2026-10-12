@@ -51,7 +51,8 @@ func blow_bubble():
 	var bubble: Bubble = BUBBLE.instantiate();
 
 	# pass on references to the audio_system and assign a random
-	# pop wav to stream
+	# pop wav to stream.  Thanks to godot forums for details
+	# on playing streams dynamically.
 	bubble.audio_system = audio_system
 	bubble.stream = pop_sounds[randi_range(0, 11)]
 	
