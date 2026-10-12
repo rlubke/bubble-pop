@@ -43,9 +43,9 @@ func pop(scored: bool):
 	audio_system.play()
 	
 	if scored:
-		main.increase_score()
+		main.change_score(1)
 	else:
-		main.decrease_score()
+		main.change_score(-1)
 
 	queue_free();
 

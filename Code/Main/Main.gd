@@ -22,15 +22,8 @@ func _input(event: InputEvent) -> void:
 			get_tree().quit()
 
 
-# Increase and displays score.
-func increase_score():
-	score += 1
-	label.text = str(score)
-
-
-# Decrease and displays score.
-func decrease_score():
-	score -= 1
+func change_score(delta: int):
+	score += delta;
 	label.text = str(score)
 
 
