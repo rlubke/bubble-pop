@@ -40,6 +40,7 @@ func on_clicked(_viewport: Node, event: InputEvent, _shape_idx: int):
 func pop(scored: bool):
 	audio_system.position = position
 	audio_system.stream = stream
+	audio_system.pitch_scale = randf_range(.8, 1.2)
 	audio_system.play()
 	
 	if scored:

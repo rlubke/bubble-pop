@@ -30,10 +30,12 @@ script = ExtResource("1_lxy7q")
 [node name="AudioSystem" type="AudioStreamPlayer2D" parent="." unique_id=1013719996]
 
 [node name="UI" type="PanelContainer" parent="." unique_id=1017107060]
+z_index = -1
 offset_left = 342.0
 offset_top = -1.0
 offset_right = 865.0
 offset_bottom = 147.0
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_ps1la")
 
 [node name="Label" type="Label" parent="UI" unique_id=551978782]
