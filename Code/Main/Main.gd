@@ -21,6 +21,7 @@ func _input(event: InputEvent) -> void:
 		if event.keycode == KEY_ESCAPE and event.pressed:
 			get_tree().quit()
 
+
 # update score based on provided delta.
 func change_score(delta: int):
 	score += delta;
