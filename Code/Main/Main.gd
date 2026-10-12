@@ -1,7 +1,7 @@
 extends Node
 class_name Main
 
-const BUBBLE = preload("res://Bubble/Bubble.tscn")
+const BUBBLE := preload("res://Bubble/Bubble.tscn")
 
 # list of all pop sounds.
 var pop_sounds: Array[Resource]

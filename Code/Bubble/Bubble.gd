@@ -2,19 +2,19 @@ extends Area2D
 class_name Bubble
 
 # translating left
-const TRANS_LEFT = 0
+const TRANS_LEFT := 0
 
 # translating right
-const TRANS_RIGHT = 1
+const TRANS_RIGHT := 1
 
-# verticle speed
-const SPEED = 100
+# vertical speed
+const SPEED := 100
 
 # max # of pixes a bubble may move left/right of its original x position
-const ABS_MAX_HT = 50
+const ABS_MAX_HT := 50
 
 # min # of pixes a bubble may move left/right of its original x position
-const ABS_MIN_HT = 20
+const ABS_MIN_HT := 20
 
 @onready
 var sprite: Sprite2D = $Sprite2D
