@@ -42,7 +42,7 @@ func pop(scored: bool):
 	audio_system.stream = stream
 	audio_system.pitch_scale = randf_range(.8, 1.2)
 	audio_system.play()
-	
+
 	if scored:
 		main.change_score(1)
 	else:
@@ -71,13 +71,14 @@ func setup_initial_position(bubble_scale: float):
 	original_x_pos = randf_range(0, get_viewport().size.x)
 	position.x = original_x_pos
 	sprite_half_length = (sprite.get_rect().size.x / 2) * bubble_scale
-	
+
 	if position.x - sprite_half_length < 0:
 		position.x = sprite_half_length;
 	elif position.x + sprite_half_length > get_viewport().size.x:
 		position.x = get_viewport().size.x - sprite_half_length
-	
+
 	position.y = (get_viewport().size.y + ((sprite.get_rect().size.y * bubble_scale)) / 2)
+
 
 # moves the bubbles left/right as they move up the viewport.
 func process_horizontal_translation():
@@ -118,7 +119,7 @@ func _ready() -> void:
 	# set scale
 	var s: float = randf_range(0.1, .8)
 	set_scale(Vector2(s, s))
-	
+
 	# set random speed
 	speed = randi_range(75, 200)
 

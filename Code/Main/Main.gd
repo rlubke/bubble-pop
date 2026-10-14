@@ -40,9 +40,9 @@ func preload_audio_files():
 			path += ("pop_0" + str(i))
 		else:
 			path += ("pop_" + str(i))
-			
+
 		path += ".wav"
-		
+
 		pop_sounds.append(load(path))
 
 
@@ -64,7 +64,7 @@ func blow_bubble():
 
 func _ready() -> void:
 	preload_audio_files()
-	
+
 	# another find on the Godot forums - handles the z-index
 	# for the bubbles, so the mouse click is handled by the top
 	# bubble only.  
